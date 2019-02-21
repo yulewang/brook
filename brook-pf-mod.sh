@@ -110,7 +110,7 @@ check_domain_ip_change(){
         user_Enabled_pf=$(echo "${user_all}"|sed -n "${integer}p"|awk '{print $4}')
         user_domain_pf=$(echo "${user_all}"|sed -n "${integer}p"|awk '{print $5}')
         if [ ! -z "$user_domain_pf" ]; then
-            ip=`dig +short ${user_domain_pf}`
+            ip=`dig +short ${user_domain_pf} | awk '{ print ; exit }'`
             if [ -n "$ip" ]; then
                 echo -e "Check domain IP: $ip"
             else
@@ -124,7 +124,7 @@ check_domain_ip_change(){
                 sed -i -e "s/${user_port} ${user_ip_pf} ${user_port_pf} ${user_Enabled_pf} ${user_domain_pf}/${user_port} ${ip} ${user_port_pf} ${user_Enabled_pf} ${user_domain_pf}/g" ${brook_conf}
                 Modify_success="1"
             else
-                echo -e "${user_domain_pf} 的IP未发生变化: ${ip}"
+                echo -e "${Info} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] ${user_domain_pf} 的IP未发生变化: ${ip}" | tee -a ${brook_log}
             fi
         fi
     done
