@@ -110,7 +110,7 @@ check_domain_ip_change(){
         user_Enabled_pf=$(echo "${user_all}"|sed -n "${integer}p"|awk '{print $4}')
         user_domain_pf=$(echo "${user_all}"|sed -n "${integer}p"|awk '{print $5}')
         if [ ! -z "$user_domain_pf" ]; then
-            ip=`dig +short ${user_domain_pf} | awk '{ print ; exit }'`
+            ip=`dig +short ${user_domain_pf} | grep -Eo '[0-9\.]{7,15}' | head -1`
             if [ -n "$ip" ]; then
                 echo -e "Check domain IP: $ip"
             else
